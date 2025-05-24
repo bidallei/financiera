@@ -1,4 +1,4 @@
-/* Reset básico */
+/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -7,21 +7,21 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f3f4f6;
-  color: #333;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  background: #f3f4f6;
+  color: #333;
 }
 
-/* Encabezado */
 header {
   background-color: #0d47a1;
   color: white;
   display: flex;
   align-items: center;
-  padding: 1rem 2rem;
+  justify-content: center;
   gap: 1rem;
+  padding: 1rem 2rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -31,34 +31,116 @@ header {
   object-fit: contain;
 }
 
-/* Menú central */
-main {
+.container {
   flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  height: calc(100vh - 64px); /* header altura aprox */
+  overflow: hidden;
 }
 
-.menu {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1.2rem;
-  max-width: 800px;
-  width: 100%;
-}
-
-.menu button {
-  padding: 1rem;
+/* Sidebar - menú a la izquierda */
+.sidebar {
   background-color: #1976d2;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 0.7rem;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.sidebar button {
+  background: transparent;
   color: white;
   border: none;
-  border-radius: 0.5rem;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-radius: 0.4rem;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.menu button:hover {
+.sidebar button:hover,
+.sidebar button.active {
   background-color: #1565c0;
+}
+
+/* Área principal central */
+main {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #eee;
+}
+
+/* Imagen de fondo */
+.background-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('fondo.jpg'); /* pon aquí tu imagen */
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.75);
+  z-index: 1;
+}
+
+/* Submenú que aparece encima de la imagen */
+.submenu {
+  position: relative;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 600px;
+  width: 90%;
+  min-height: 200px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-content: center;
+}
+
+/* Botones del submenú */
+.submenu button {
+  background-color: #1976d2;
+  border: none;
+  color: white;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex: 1 1 120px;
+  max-width: 180px;
+}
+
+.submenu button:hover {
+  background-color: #1565c0;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .sidebar button {
+    flex: 1 0 auto;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  main {
+    height: 300px;
+  }
 }

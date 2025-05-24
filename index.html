@@ -2,29 +2,38 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Financiera</title>
   <link rel="stylesheet" href="styles..css" />
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Logo de Financiera" class="logo" />
+    <img src="logo.png" alt="Logo Financiera" class="logo" />
     <h1>Financiera</h1>
   </header>
 
-  <main>
-    <div class="menu">
-      <button>Validación</button>
-      <button>Buró</button>
-      <button>Créditos</button>
-      <button>Clientes</button>
-      <button>Cobranza</button>
-      <button>Catálogos</button>
-      <button>Configuración</button>
-      <button>Gestión</button>
-      <button>Contabilidad</button>
-      <button>Simulador</button>
-    </div>
-  </main>
+  <div class="container">
+    <nav class="sidebar">
+      <button data-menu="validacion">Validación</button>
+      <button data-menu="buro">Buró</button>
+      <button data-menu="creditos">Créditos</button>
+      <button data-menu="clientes">Clientes</button>
+      <button data-menu="cobranza">Cobranza</button>
+      <button data-menu="catalogos">Catálogos</button>
+      <button data-menu="configuracion">Configuración</button>
+      <button data-menu="gestion">Gestión</button>
+      <button data-menu="contabilidad">Contabilidad</button>
+      <button data-menu="simulador">Simulador</button>
+    </nav>
+
+    <main>
+      <div class="background-image"></div>
+      <div class="submenu">
+        <p></p>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
