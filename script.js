@@ -35,6 +35,13 @@ sidebarButtons.forEach(btn => {
     items.forEach(text => {
       const b = document.createElement('button');
       b.textContent = text;
+      b.addEventListener('click', () => {
+        if (text === 'Simulador de préstamos') {
+          window.location.href = 'simuladorprestamo.html';
+        } else {
+          alert(`Seleccionaste: ${text} (función no disponible aún)`);
+        }
+      });
       submenu.appendChild(b);
     });
   });
