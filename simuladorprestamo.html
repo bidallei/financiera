@@ -1,209 +1,286 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Simulador de Préstamos</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      overflow-y: auto;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simulador de Préstamos - Financiera</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column; align-items: center;
+    min-height: 100vh;
+  }
+  h1 {
+    color: #1976d2;
+    margin-top: 1rem;
+  }
+  form {
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+    margin-top: 1rem;
+    width: 320px;
+  }
+  label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+  select, input[type=number] {
+    width: 100%;
+    margin-top: 0.3rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  button {
+    margin-top: 1.5rem;
+    width: 100%;
+    background: #1976d2;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    padding: 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background: #135ba1;
+  }
+  #resultado {
+    margin-top: 2rem;
+    width: 90%;
+    max-width: 800px;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgb(0 0 0 / 0.1);
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: right;
+  }
+  th {
+    background-color: #1976d2;
+    color: white;
+  }
+  td:first-child, th:first-child {
+    text-align: center;
+  }
+  .botones-export {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .botones-export button {
+    width: auto;
+    padding: 0.5rem 1.2rem;
+  }
+</style>
 
-    header {
-      background-color: #1976d2;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-    }
-
-    form {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-      width: 100%;
-      margin-bottom: 2rem;
-    }
-
-    label {
-      font-weight: bold;
-    }
-
-    input {
-      padding: 0.5rem;
-      margin-top: 0.2rem;
-      margin-bottom: 1rem;
-      width: 100%;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    button {
-      padding: 0.7rem;
-      font-size: 1rem;
-      background: #1976d2;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 0.5rem;
-    }
-
-    table {
-      border-collapse: collapse;
-      margin-top: 1rem;
-      background: white;
-      width: 100%;
-      max-width: 700px;
-    }
-
-    th, td {
-      padding: 0.8rem;
-      border: 1px solid #ccc;
-      text-align: center;
-    }
-
-    th {
-      background: #1976d2;
-      color: white;
-    }
-
-    #resultado {
-      width: 100%;
-      max-width: 800px;
-    }
-
-    .export-buttons {
-      margin-top: 2rem;
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-  </style>
+<!-- Librerías para exportar Excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- Librerías para PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Simulador de Préstamos</h1>
-  </header>
 
-  <main>
-    <form id="simuladorForm">
-      <label for="monto">Monto solicitado:</label>
-      <input type="number" id="monto" name="monto" min="10000" max="20000" step="1000" required />
+<h1>Simulador de Préstamos</h1>
 
-      <label for="semanas">Semanas:</label>
-      <input type="number" id="semanas" name="semanas" min="10" max="50" required />
+<form id="simuladorForm" onsubmit="event.preventDefault(); generarSimulacion();">
+  <label for="monto">Monto solicitado (pesos):</label>
+  <select id="monto" required>
+    <option value="">Selecciona un monto</option>
+    <option value="10000">$10,000</option>
+    <option value="11000">$11,000</option>
+    <option value="12000">$12,000</option>
+    <option value="13000">$13,000</option>
+    <option value="14000">$14,000</option>
+    <option value="15000">$15,000</option>
+    <option value="16000">$16,000</option>
+    <option value="17000">$17,000</option>
+    <option value="18000">$18,000</option>
+    <option value="19000">$19,000</option>
+    <option value="20000">$20,000</option>
+  </select>
 
-      <button type="submit">Simular</button>
-    </form>
-
-    <div id="resultado"></div>
-
-    <div class="export-buttons">
-      <button onclick="exportarExcel()">Exportar a Excel</button>
-      <button onclick="exportarPDF()">Exportar a PDF</button>
-    </div>
-  </main>
-
-  <script>
-    let resultadoHTML = '';
-
-    document.getElementById('simuladorForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const monto = parseInt(document.getElementById('monto').value);
-      const semanas = parseInt(document.getElementById('semanas').value);
-      const tasaProporcional = 0.5;
-      const factorPago = 1 + (semanas / 21) * tasaProporcional;
-      const totalPagar = monto * factorPago;
-      const pagoSemanal = Math.floor(totalPagar / semanas / 10) * 10;
-      const pagoFinal = totalPagar - (pagoSemanal * (semanas - 1));
-
-      let tabla = `
-        <h2>Resultado de la Simulación</h2>
-        <table id="tablaPagos">
-          <thead>
-            <tr>
-              <th>Semana</th>
-              <th>Pago semanal</th>
-              <th>Total acumulado</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      let acumulado = 0;
-      for (let i = 1; i <= semanas; i++) {
-        const pago = (i === semanas) ? pagoFinal : pagoSemanal;
-        acumulado += pago;
-        tabla += `
-          <tr>
-            <td>${i}</td>
-            <td>${pago.toFixed(2)}</td>
-            <td>${acumulado.toFixed(2)}</td>
-          </tr>
-        `;
+  <label for="semanas">Semanas:</label>
+  <select id="semanas" required>
+    <option value="">Selecciona semanas</option>
+    <!-- 10 a 50 -->
+    <script>
+      for(let i=10; i<=50; i++){
+        document.write(`<option value="${i}">${i}</option>`);
       }
+    </script>
+  </select>
 
-      tabla += `
-          </tbody>
-        </table>
-        <h2>Total a pagar: $${totalPagar.toFixed(2)}</h2>
-        <p><strong>Monto solicitado:</strong> $${monto}</p>
-        <p><strong>Semanas:</strong> ${semanas}</p>
-      `;
+  <button type="submit">Calcular</button>
+</form>
 
-      document.getElementById('resultado').innerHTML = tabla;
-      resultadoHTML = tabla;
-    });
+<div id="resultado"></div>
 
-    function exportarExcel() {
-      const tabla = document.getElementById('tablaPagos');
-      if (!tabla) return alert("Primero genera una simulación.");
+<div class="botones-export" style="display:none;" id="botonesExport">
+  <button onclick="exportarExcel()">Exportar Excel</button>
+  <button onclick="exportarPDFdesdeDatos()">Exportar PDF</button>
+</div>
 
-      let csv = 'Semana, Pago semanal, Total acumulado\n';
-      for (let row of tabla.rows) {
-        let datos = Array.from(row.cells).map(td => td.innerText);
-        csv += datos.join(',') + '\n';
-      }
+<script>
+function generarSimulacion() {
+  const monto = parseInt(document.getElementById('monto').value);
+  const semanas = parseInt(document.getElementById('semanas').value);
 
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'simulacion.csv';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+  if (!monto || !semanas) {
+    alert('Por favor selecciona monto y semanas.');
+    return;
+  }
 
-    function exportarPDF() {
-      const elemento = document.getElementById('resultado');
-      if (!elemento.innerHTML.trim()) return alert("Primero genera una simulación.");
+  // Cálculo proporcional:
+  // base: 10000 en 21 semanas => 15000 total
+  const tasaProporcional = 0.5;
+  const factorPago = 1 + (semanas / 21) * tasaProporcional;
+  const totalPagar = monto * factorPago;
 
-      const opciones = {
-        margin: 10,
-        filename: 'simulacion.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+  // Pago semanal (redondeado a 10 pesos)
+  const pagoSemanal = Math.floor(totalPagar / semanas / 10) * 10;
+  // Ajuste para último pago (para no pasarnos)
+  const pagoFinal = totalPagar - pagoSemanal * (semanas - 1);
 
-      html2pdf().from(elemento).set(opciones).save();
-    }
-  </script>
+  let html = `<h2>Resultado de simulación</h2>`;
+  html += `<p><strong>Monto solicitado:</strong> $${monto.toLocaleString()}</p>`;
+  html += `<p><strong>Semanas:</strong> ${semanas}</p>`;
+  html += `<p><strong>Total a pagar:</strong> $${totalPagar.toFixed(2)}</p>`;
+
+  html += `<table><thead><tr><th>Semana</th><th>Pago semanal (MXN)</th><th>Pago acumulado (MXN)</th></tr></thead><tbody>`;
+
+  let acumulado = 0;
+  for(let i=1; i<=semanas; i++) {
+    const pago = (i === semanas) ? pagoFinal : pagoSemanal;
+    acumulado += pago;
+    html += `<tr><td>${i}</td><td>${pago.toFixed(2)}</td><td>${acumulado.toFixed(2)}</td></tr>`;
+  }
+  html += `</tbody></table>`;
+
+  document.getElementById('resultado').innerHTML = html;
+  document.getElementById('botonesExport').style.display = 'flex';
+}
+
+// Exportar a Excel
+function exportarExcel() {
+  const monto = parseInt(document.getElementById('monto').value);
+  const semanas = parseInt(document.getElementById('semanas').value);
+  if (!monto || !semanas) {
+    alert('Primero genera una simulación.');
+    return;
+  }
+
+  // Recalcular datos
+  const tasaProporcional = 0.5;
+  const factorPago = 1 + (semanas / 21) * tasaProporcional;
+  const totalPagar = monto * factorPago;
+
+  const pagoSemanal = Math.floor(totalPagar / semanas / 10) * 10;
+  const pagoFinal = totalPagar - pagoSemanal * (semanas - 1);
+
+  const filas = [];
+  let acumulado = 0;
+  for(let i=1; i<=semanas; i++) {
+    const pago = (i === semanas) ? pagoFinal : pagoSemanal;
+    acumulado += pago;
+    filas.push({ Semana: i, 'Pago semanal': pago.toFixed(2), 'Pago acumulado': acumulado.toFixed(2) });
+  }
+
+  // Crear libro y hoja
+  const wb = XLSX.utils.book_new();
+  const wsData = [
+    ['Simulación de préstamo'],
+    [`Monto solicitado: $${monto}`],
+    [`Semanas: ${semanas}`],
+    [`Total a pagar: $${totalPagar.toFixed(2)}`],
+    [],
+    ['Semana', 'Pago semanal (MXN)', 'Pago acumulado (MXN)'],
+  ];
+
+  filas.forEach(f => {
+    wsData.push([f.Semia, f['Pago semanal'], f['Pago acumulado']]);
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  XLSX.utils.book_append_sheet(wb, ws, 'Simulación');
+
+  XLSX.writeFile(wb, 'simulacion_prestamo.xlsx');
+}
+
+// Exportar PDF con jsPDF y autoTable
+function exportarPDFdesdeDatos() {
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    alert("La librería jsPDF no está cargada.");
+    return;
+  }
+
+  const monto = parseInt(document.getElementById('monto').value);
+  const semanas = parseInt(document.getElementById('semanas').value);
+
+  if (!monto || !semanas) {
+    alert("Primero genera una simulación.");
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+
+  const tasaProporcional = 0.5;
+  const factorPago = 1 + (semanas / 21) * tasaProporcional;
+  const totalPagar = monto * factorPago;
+
+  const pagoSemanal = Math.floor(totalPagar / semanas / 10) * 10;
+  const pagoFinal = totalPagar - (pagoSemanal * (semanas - 1));
+
+  const filas = [];
+  let acumulado = 0;
+  for (let i = 1; i <= semanas; i++) {
+    const pago = (i === semanas) ? pagoFinal : pagoSemanal;
+    acumulado += pago;
+    filas.push([i.toString(), pago.toFixed(2), acumulado.toFixed(2)]);
+  }
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text("Simulador de Préstamos", 14, 20);
+  doc.setFontSize(12);
+  doc.text(`Monto solicitado: $${monto}`, 14, 30);
+  doc.text(`Semanas: ${semanas}`, 14, 36);
+  doc.text(`Total a pagar: $${totalPagar.toFixed(2)}`, 14, 42);
+
+  doc.autoTable({
+    startY: 50,
+    head: [['Semana', 'Pago semanal', 'Total acumulado']],
+    body: filas,
+    theme: 'striped',
+    headStyles: { fillColor: [25, 118, 210] },
+    styles: { cellPadding: 3, fontSize: 10 }
+  });
+
+  doc.save("simulacion.pdf");
+}
+</script>
+
 </body>
 </html>
