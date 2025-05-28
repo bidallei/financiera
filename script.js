@@ -5,7 +5,7 @@ const submenusData = {
   validacion: ['Supervisores', 'Verificación 1', 'Verificación 2', 'Verificación 3'],
   buro: [],
   creditos: ['Reporte créditos', 'Restructuración de pagos', 'Vencido por promotor', 'Crédito nuevo'],
-  clientes: ['Consultas', 'Reportes', 'Telemarketing'],
+  clientes: ['Cliente nuevo', 'Consultas', 'Reportes', 'Telemarketing'],
   cobranza: [],
   catalogos: [],
   configuracion: [],
@@ -14,9 +14,16 @@ const submenusData = {
   simulador: ['Simulador de préstamos', 'Simulador de pagos', 'Simulador de tasas'],
 };
 
+const rutas = {
+      'Simulador de préstamos': 'simuladorprestamo.html',
+      'Cliente nuevo': 'clientenuevo.html'
+    };
+
 function clearActive() {
   sidebarButtons.forEach(btn => btn.classList.remove('active'));
 }
+
+let activeMenuKey = null;
 
 sidebarButtons.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -33,16 +40,16 @@ sidebarButtons.forEach(btn => {
     }
 
     items.forEach(text => {
-      const b = document.createElement('button');
-      b.textContent = text;
-      b.addEventListener('click', () => {
-        if (text === 'Simulador de préstamos') {
-          window.location.href = 'simuladorprestamo.html';
-        } else {
-          alert(`Seleccionaste: ${text} (función no disponible aún)`);
-        }
-      });
-      submenu.appendChild(b);
+          const b = document.createElement('button');
+          b.textContent = text;
+          b.addEventListener('click', () => {
+            if (rutas[text]) {
+              window.location.href = rutas[text];
+            } else {
+              alert(`Seleccionaste: ${text} (función no disponible aún)`);
+            }
+          });
+          submenu.appendChild(b);
     });
   });
 });

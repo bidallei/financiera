@@ -187,28 +187,63 @@ function calcularPagos(monto, semanas) {
 function generarSimulacion() {
   const monto = parseInt(document.getElementById('monto').value);
   const semanas = parseInt(document.getElementById('semanas').value);
+
   if (!monto || !semanas) {
-    alert("Por favor selecciona monto y semanas.");
+    alert('Por favor selecciona monto y semanas.');
     return;
   }
 
-  const resultado = calcularPagos(monto, semanas);
-  if (!resultado) return;
+  // Cálculo de interés
+  let totalPagar;
+  if (semanas <= 21) {
+    totalPagar = monto * 1.5;
+  } else {
+    const interes = 0.5 + ((semanas - 21) / (40 - 21)) * (0.8 - 0.5);
+    totalPagar = monto * (1 + interes);
+  }
+
+  // Redondeo a múltiplos permitidos
+  const redondear = (valor) => {
+    const opciones = [10, 20, 50];
+    for (let r of opciones) {
+      const red = Math.ceil(valor / r) * r;
+      if (red >= valor) return red;
+    }
+    return valor;
+  };
+
+  let pagoBase = totalPagar / semanas;
+  let pagoSemanal = redondear(pagoBase);
+  let totalParcial = pagoSemanal * (semanas - 1);
+  let pagoFinal = +(totalPagar - totalParcial).toFixed(2);
+
+  // Ajustar si el pago final es mayor que el semanal
+  if (pagoFinal > pagoSemanal) {
+    pagoSemanal = redondear(pagoSemanal + 1);
+    totalParcial = pagoSemanal * (semanas - 1);
+    pagoFinal = +(totalPagar - totalParcial).toFixed(2);
+  }
 
   let html = `<h2>Resultado de simulación</h2>`;
   html += `<p><strong>Monto solicitado:</strong> $${monto.toLocaleString()}</p>`;
   html += `<p><strong>Semanas:</strong> ${semanas}</p>`;
-  html += `<p><strong>Total a pagar:</strong> $${resultado.total.toFixed(2)}</p>`;
+  html += `<p><strong>Total a pagar:</strong> $${totalPagar.toFixed(2)}</p>`;
 
-  html += `<table><thead><tr><th>Semana</th><th>Pago semanal</th><th>Acumulado</th></tr></thead><tbody>`;
-  resultado.tabla.forEach(fila => {
-    html += `<tr><td>${fila.semana}</td><td>$${fila.pago}</td><td>$${fila.acumulado}</td></tr>`;
-  });
+  html += `<table><thead><tr><th>Semana</th><th>Pago semanal (MXN)</th><th>Pago acumulado (MXN)</th></tr></thead><tbody>`;
+
+  let acumulado = 0;
+  for(let i = 1; i <= semanas; i++) {
+    const pago = (i === semanas) ? pagoFinal : pagoSemanal;
+    acumulado += pago;
+    html += `<tr><td>${i}</td><td>${pago.toFixed(2)}</td><td>${acumulado.toFixed(2)}</td></tr>`;
+  }
+
   html += `</tbody></table>`;
 
   document.getElementById('resultado').innerHTML = html;
   document.getElementById('botonesExport').style.display = 'flex';
 }
+
 
 function exportarExcel() {
   const monto = parseInt(document.getElementById('monto').value);
