@@ -158,46 +158,58 @@
 </div>
 
 <script>
+function calcularPagos(monto, semanas) {
+  let factor;
+  if (semanas <= 21) {
+    factor = 1.5;
+  } else if (semanas <= 40) {
+    factor = 1.5 + ((semanas - 21) * 0.015789); // escalar desde 1.5 a 1.8
+  } else {
+    alert("El número máximo de semanas permitido es 40.");
+    return null;
+  }
+
+  const total = monto * factor;
+  const pagoBase = Math.floor(total / semanas / 10) * 10;
+  const pagoFinal = total - (pagoBase * (semanas - 1));
+
+  const tabla = [];
+  let acumulado = 0;
+  for (let i = 1; i <= semanas; i++) {
+    const pago = (i === semanas) ? pagoFinal : pagoBase;
+    acumulado += pago;
+    tabla.push({ semana: i, pago: pago.toFixed(2), acumulado: acumulado.toFixed(2) });
+  }
+
+  return { total, tabla };
+}
+
 function generarSimulacion() {
   const monto = parseInt(document.getElementById('monto').value);
   const semanas = parseInt(document.getElementById('semanas').value);
-
   if (!monto || !semanas) {
-    alert('Por favor selecciona monto y semanas.');
+    alert("Por favor selecciona monto y semanas.");
     return;
   }
 
-  // Cálculo proporcional:
-  // base: 10000 en 21 semanas => 15000 total
-  const tasaProporcional = 0.5;
-  const factorPago = 1 + (semanas / 21) * tasaProporcional;
-  const totalPagar = monto * factorPago;
-
-  // Pago semanal (redondeado a 10 pesos)
-  const pagoSemanal = Math.floor(totalPagar / semanas / 10) * 10;
-  // Ajuste para último pago (para no pasarnos)
-  const pagoFinal = totalPagar - pagoSemanal * (semanas - 1);
+  const resultado = calcularPagos(monto, semanas);
+  if (!resultado) return;
 
   let html = `<h2>Resultado de simulación</h2>`;
   html += `<p><strong>Monto solicitado:</strong> $${monto.toLocaleString()}</p>`;
   html += `<p><strong>Semanas:</strong> ${semanas}</p>`;
-  html += `<p><strong>Total a pagar:</strong> $${totalPagar.toFixed(2)}</p>`;
+  html += `<p><strong>Total a pagar:</strong> $${resultado.total.toFixed(2)}</p>`;
 
-  html += `<table><thead><tr><th>Semana</th><th>Pago semanal (MXN)</th><th>Pago acumulado (MXN)</th></tr></thead><tbody>`;
-
-  let acumulado = 0;
-  for(let i=1; i<=semanas; i++) {
-    const pago = (i === semanas) ? pagoFinal : pagoSemanal;
-    acumulado += pago;
-    html += `<tr><td>${i}</td><td>${pago.toFixed(2)}</td><td>${acumulado.toFixed(2)}</td></tr>`;
-  }
+  html += `<table><thead><tr><th>Semana</th><th>Pago semanal</th><th>Acumulado</th></tr></thead><tbody>`;
+  resultado.tabla.forEach(fila => {
+    html += `<tr><td>${fila.semana}</td><td>$${fila.pago}</td><td>$${fila.acumulado}</td></tr>`;
+  });
   html += `</tbody></table>`;
 
   document.getElementById('resultado').innerHTML = html;
   document.getElementById('botonesExport').style.display = 'flex';
 }
 
-// Exportar a Excel
 function exportarExcel() {
   const monto = parseInt(document.getElementById('monto').value);
   const semanas = parseInt(document.getElementById('semanas').value);
@@ -206,44 +218,25 @@ function exportarExcel() {
     return;
   }
 
-  // Recalcular datos
-  const tasaProporcional = 0.5;
-  const factorPago = 1 + (semanas / 21) * tasaProporcional;
-  const totalPagar = monto * factorPago;
+  const resultado = calcularPagos(monto, semanas);
+  if (!resultado) return;
 
-  const pagoSemanal = Math.floor(totalPagar / semanas / 10) * 10;
-  const pagoFinal = totalPagar - pagoSemanal * (semanas - 1);
-
-  const filas = [];
-  let acumulado = 0;
-  for(let i=1; i<=semanas; i++) {
-    const pago = (i === semanas) ? pagoFinal : pagoSemanal;
-    acumulado += pago;
-    filas.push({ Semana: i, 'Pago semanal': pago.toFixed(2), 'Pago acumulado': acumulado.toFixed(2) });
-  }
-
-  // Crear libro y hoja
   const wb = XLSX.utils.book_new();
   const wsData = [
     ['Simulación de préstamo'],
     [`Monto solicitado: $${monto}`],
     [`Semanas: ${semanas}`],
-    [`Total a pagar: $${totalPagar.toFixed(2)}`],
+    [`Total a pagar: $${resultado.total.toFixed(2)}`],
     [],
     ['Semana', 'Pago semanal (MXN)', 'Pago acumulado (MXN)'],
+    ...resultado.tabla.map(f => [f.semana, f.pago, f.acumulado])
   ];
-
-  filas.forEach(f => {
-    wsData.push([f.Semia, f['Pago semanal'], f['Pago acumulado']]);
-  });
 
   const ws = XLSX.utils.aoa_to_sheet(wsData);
   XLSX.utils.book_append_sheet(wb, ws, 'Simulación');
-
   XLSX.writeFile(wb, 'simulacion_prestamo.xlsx');
 }
 
-// Exportar PDF con jsPDF y autoTable
 function exportarPDFdesdeDatos() {
   if (!window.jspdf || !window.jspdf.jsPDF) {
     alert("La librería jsPDF no está cargada.");
@@ -252,50 +245,37 @@ function exportarPDFdesdeDatos() {
 
   const monto = parseInt(document.getElementById('monto').value);
   const semanas = parseInt(document.getElementById('semanas').value);
-
   if (!monto || !semanas) {
     alert("Primero genera una simulación.");
     return;
   }
 
-  const { jsPDF } = window.jspdf;
-
-  const tasaProporcional = 0.5;
-  const factorPago = 1 + (semanas / 21) * tasaProporcional;
-  const totalPagar = monto * factorPago;
-
-  const pagoSemanal = Math.floor(totalPagar / semanas / 10) * 10;
-  const pagoFinal = totalPagar - (pagoSemanal * (semanas - 1));
-
-  const filas = [];
-  let acumulado = 0;
-  for (let i = 1; i <= semanas; i++) {
-    const pago = (i === semanas) ? pagoFinal : pagoSemanal;
-    acumulado += pago;
-    filas.push([i.toString(), pago.toFixed(2), acumulado.toFixed(2)]);
-  }
+  const resultado = calcularPagos(monto, semanas);
+  if (!resultado) return;
 
   const doc = new jsPDF();
-
   doc.setFontSize(16);
   doc.text("Simulador de Préstamos", 14, 20);
   doc.setFontSize(12);
   doc.text(`Monto solicitado: $${monto}`, 14, 30);
   doc.text(`Semanas: ${semanas}`, 14, 36);
-  doc.text(`Total a pagar: $${totalPagar.toFixed(2)}`, 14, 42);
+  doc.text(`Total a pagar: $${resultado.total.toFixed(2)}`, 14, 42);
 
   doc.autoTable({
     startY: 50,
     head: [['Semana', 'Pago semanal', 'Total acumulado']],
-    body: filas,
+    body: resultado.tabla.map(f => [f.semana, f.pago, f.acumulado]),
     theme: 'striped',
     headStyles: { fillColor: [25, 118, 210] },
-    styles: { cellPadding: 3, fontSize: 10 }
+    styles: { cellPadding: 3, fontSize: 10 },
+    margin: { top: 10 },
+    pageBreak: 'auto'
   });
 
   doc.save("simulacion.pdf");
 }
 </script>
+
 
 </body>
 </html>
