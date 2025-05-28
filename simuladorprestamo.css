@@ -1,0 +1,122 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    margin: 0; 
+    padding: 0;
+    min-height: 100vh;
+  }  
+
+header {
+  background-color: #0d47a1;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.container {
+  max-width: 1000px;
+  width: 100%;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container h1 {
+  text-align: center;
+  color: #0d47a1;
+  margin-bottom: 1rem;
+}
+
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+form {
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+    margin-top: 1rem;
+    width: 320px;
+}
+label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+    color: #333;
+}
+select, input[type=number] {
+    width: 100%;
+    margin-top: 0.3rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+button {
+    margin-top: 1.5rem;
+    width: 100%;
+    background: #1976d2;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    padding: 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background: #135ba1;
+}
+#resultado {
+    margin-top: 2rem;
+    width: 90%;
+    max-width: 800px;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgb(0 0 0 / 0.1);
+    overflow-x: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: right;
+}
+th {
+    background-color: #1976d2;
+    color: white;
+}
+td:first-child, th:first-child {
+    text-align: center;
+}
+.botones-export {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.botones-export button {
+    width: auto;
+    padding: 0.5rem 1.2rem;
+}

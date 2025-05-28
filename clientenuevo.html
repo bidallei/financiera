@@ -1,3 +1,5 @@
+<!--clientenuevo.html-->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,14 +9,15 @@
   <link rel="stylesheet" href="clientenuevo.css">
 </head>
 <body>
-  <div class="container">
+    <div id="header-container"></div>
+    <div class="container">
     <h1>Registro de Nuevo Cliente</h1>
 
     <form id="formCliente">
 
       <fieldset>
         <legend>Datos del Cliente</legend>
-        <label>Nombre: <input type="text" name="nombre" required></label>
+        <label>Nombre(s): <input type="text" name="nombre" required></label>
         <label>Apellido Paterno: <input type="text" name="apellidoPaterno" required></label>
         <label>Apellido Materno: <input type="text" name="apellidoMaterno"></label>
         <label>Sexo:
@@ -22,6 +25,7 @@
             <option value="masculino">Masculino</option>
             <option value="femenino">Femenino</option>
           </select>
+        </label>
         <label>Fecha de nacimiento: <input type="date" name="fechaNacimiento" required></label>
         <label>RFC: <input type="text" name="rfc" readonly placeholder="Se genera automáticamente"></label>
 
@@ -94,5 +98,75 @@
 
     </form>
   </div>
+    <script>
+        fetch('header.html')
+            .then(res => res.text())
+            .then(data => {
+            document.getElementById('header-container').innerHTML = data;
+            })
+            .catch(err => {
+            console.error('Error al cargar el header:', err);
+            });
+
+        function generarRFC(nombreCompleto, paterno, materno, fechaNac) {
+            // Función para limpiar y poner en mayúsculas sin acentos ni caracteres especiales
+            const limpiar = texto => texto.normalize("NFD")
+                                        .replace(/[\u0300-\u036f]/g, "")
+                                        .replace(/[^a-zA-Z\s]/g, "")
+                                        .toUpperCase()
+                                        .trim();
+
+            const nombres = limpiar(nombreCompleto).split(/\s+/);
+            // Si el primer nombre es José o María y hay más nombres, se usa el segundo nombre
+            const nombre = (nombres[0] === "JOSE" || nombres[0] === "MARIA") && nombres.length > 1 ? nombres[1] : nombres[0];
+            paterno = limpiar(paterno);
+            materno = limpiar(materno);
+
+            // Primera letra del apellido paterno
+            const letra1 = paterno.charAt(0) || "X";
+
+            // Primera vocal interna del apellido paterno (después de la primera letra)
+            const vocales = paterno.slice(1).match(/[AEIOU]/);
+            const letra2 = vocales ? vocales[0] : "X";
+
+            // Primera letra del apellido materno, si no hay se usa X
+            const letra3 = materno.charAt(0) || "X";
+
+            // Primera letra del nombre
+            const letra4 = nombre.charAt(0) || "X";
+
+            // Crear fecha con formato ISO para evitar desfases
+            // Se añade 'T00:00:00' para evitar problema de zona horaria
+            const fecha = new Date(fechaNac + 'T00:00:00');
+            if (isNaN(fecha)) return "";
+
+            const año = String(fecha.getFullYear()).slice(-2);
+            const mes = String(fecha.getMonth() + 1).padStart(2, "0"); // Mes: 0-11 +1 para 1-12
+            const dia = String(fecha.getDate()).padStart(2, "0");      // Día: 1-31 sin sumar nada
+
+            return `${letra1}${letra2}${letra3}${letra4}${año}${mes}${dia}`;
+        }
+
+        // Esperar a que el DOM cargue y poner el event listener
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("formCliente");
+            const campos = ["nombre", "apellidoPaterno", "apellidoMaterno", "fechaNacimiento"];
+
+            campos.forEach(campo => {
+            form.elements[campo].addEventListener("input", actualizarRFC);
+            });
+
+            function actualizarRFC() {
+            const nombre = form.elements["nombre"].value;
+            const paterno = form.elements["apellidoPaterno"].value;
+            const materno = form.elements["apellidoMaterno"].value;
+            const fechaNac = form.elements["fechaNacimiento"].value;
+
+            const rfc = generarRFC(nombre, paterno, materno, fechaNac);
+            form.elements["rfc"].value = rfc;
+            }
+        });
+    </script>
+
 </body>
 </html>
