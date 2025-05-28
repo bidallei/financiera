@@ -7,11 +7,10 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
   background: #f3f4f6;
   color: #333;
+  margin: 0;
+  padding: 0;
 }
 
 header {
@@ -32,12 +31,14 @@ header {
 }
 
 .container {
-  flex: 1;
   display: flex;
-  height: calc(100vh - 64px);
-  overflow: hidden;
+  min-height: calc(100vh - 64px);
 }
 
+h1 {
+    color: #1976d2;
+    margin-top: 1rem;
+}
 
 /* Sidebar - menú a la izquierda */
 .sidebar {
@@ -143,5 +144,92 @@ main {
   }
   main {
     height: 300px;
+  }
+}
+
+/* Página de cliente nuevo */
+form {
+  width: 100%;
+  max-width: 1000px;
+  margin: 2rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+form h4 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #0d47a1;
+  font-weight: 600;
+}
+
+fieldset {
+  border: none;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  border-top: 2px solid #1976d2;
+}
+
+legend {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1976d2;
+  padding: 0 0.5rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+input, select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-top: 0.3rem;
+  width: 100%;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 3px rgba(25, 118, 210, 0.5);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.form-actions button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-actions button:hover {
+  background-color: #0d47a1;
+}
+
+@media (max-width: 700px) {
+  form {
+    padding: 1rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

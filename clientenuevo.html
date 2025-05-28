@@ -1,1 +1,98 @@
-<p>Hola</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nuevo Cliente</title>
+  <link rel="stylesheet" href="clientenuevo.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Registro de Nuevo Cliente</h1>
+
+    <form id="formCliente">
+
+      <fieldset>
+        <legend>Datos del Cliente</legend>
+        <label>Nombre: <input type="text" name="nombre" required></label>
+        <label>Apellido Paterno: <input type="text" name="apellidoPaterno" required></label>
+        <label>Apellido Materno: <input type="text" name="apellidoMaterno"></label>
+        <label>Sexo:
+          <select name="sexo" required>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+          </select>
+        <label>Fecha de nacimiento: <input type="date" name="fechaNacimiento" required></label>
+        <label>RFC: <input type="text" name="rfc" readonly placeholder="Se genera automáticamente"></label>
+
+        <h4>Domicilio</h4>
+        <label>Calle: <input type="text" name="calle" required></label>
+        <label>Número exterior: <input type="text" name="numExterior" required></label>
+        <label>Número interior: <input type="text" name="numInterior"></label>
+        <label>Colonia / Fraccionamiento: <input type="text" name="colonia" required></label>
+        <label>Código Postal: <input type="text" name="cp" required></label>
+
+        <label>Teléfono: <input type="tel" name="telefono" required></label>
+        <label>Tipo de vivienda: <input type="text" name="tipoVivienda"></label>
+        <label>Tiempo de residencia: <input type="text" name="tiempoResidencia"></label>
+        <label>Dependientes económicos: <input type="number" name="dependientes" min="0"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Información Laboral</legend>
+        <label>Lugar de trabajo: <input type="text" name="lugarTrabajo"></label>
+        <label>Domicilio: <input type="text" name="domTrabajo"></label>
+        <label>Teléfono: <input type="tel" name="telTrabajo"></label>
+        <label>Puesto: <input type="text" name="puesto"></label>
+        <label>Tiempo de trabajo: <input type="text" name="tiempoTrabajo"></label>
+
+        <label>Sueldo:
+          <input type="number" name="sueldo" min="0">
+          <select name="periodicidadSueldo">
+            <option value="semanal">Semanal</option>
+            <option value="quincenal">Quincenal</option>
+            <option value="mensual">Mensual</option>
+          </select>
+        </label>
+
+        <label>Nombre del jefe inmediato: <input type="text" name="jefeInmediato"></label>
+        <label>Otra percepción: <input type="text" name="otraPercepcion"></label>
+        <label>Aportación mensual de percepción extra: <input type="number" name="aportacionPercepcion" min="0"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Aval</legend>
+        <label>Nombre: <input type="text" name="avalNombre"></label>
+        <label>Domicilio: <input type="text" name="avalDomicilio"></label>
+        <label>Teléfono: <input type="tel" name="avalTelefono"></label>
+        <label>Trabajo: <input type="text" name="avalTrabajo"></label>
+        <label># INE: <input type="text" name="avalINE"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Referencia 1</legend>
+        <label>Nombre: <input type="text" name="ref1Nombre"></label>
+        <label>Domicilio: <input type="text" name="ref1Domicilio"></label>
+        <label>Teléfono: <input type="tel" name="ref1Telefono"></label>
+        <label>Parentesco: <input type="text" name="ref1Parentesco"></label>
+        <label>Tiempo de conocerse: <input type="text" name="ref1Tiempo"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Referencia 2</legend>
+        <label>Nombre: <input type="text" name="ref2Nombre"></label>
+        <label>Domicilio: <input type="text" name="ref2Domicilio"></label>
+        <label>Teléfono: <input type="tel" name="ref2Telefono"></label>
+        <label>Parentesco: <input type="text" name="ref2Parentesco"></label>
+        <label>Tiempo de conocerse: <input type="text" name="ref2Tiempo"></label>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="submit">Guardar</button>
+        <button type="reset">Limpiar</button>
+      </div>
+
+    </form>
+  </div>
+</body>
+</html>
