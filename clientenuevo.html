@@ -9,9 +9,52 @@
   <link rel="stylesheet" href="clientenuevo.css">
 </head>
 <body>
-    <!-- Firebase SDKs (compatibilidad para usar en GitHub Pages) -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDhjt6n29YZsib-JkXcl6GcYa8EXigSBGU",
+      authDomain: "basedatosfinancierabidallei01.firebaseapp.com",
+      projectId: "basedatosfinancierabidallei01",
+      storageBucket: "basedatosfinancierabidallei01.firebasestorage.app",
+      messagingSenderId: "1072895987138",
+      appId: "1:1072895987138:web:fe27b216af1ae8e31ada5b",
+      measurementId: "G-HMF2T2675G"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("formCliente");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const datos = {};
+        const elementos = form.elements;
+
+        for (let i = 0; i < elementos.length; i++) {
+          const el = elementos[i];
+          if (el.name) datos[el.name] = el.value;
+        }
+
+        try {
+          await addDoc(collection(db, "clientes"), datos);
+          alert("Datos guardados en Firebase con éxito.");
+          form.reset();
+        } catch (error) {
+          console.error("Error al guardar en Firebase:", error);
+          alert("Error al guardar datos.");
+        }
+      });
+    });
+  </script>
+
     
     <div id="header-container"></div>
     <div class="container">
@@ -220,51 +263,14 @@
             });
 
             function actualizarRFC() {
-            const nombre = form.elements["nombre"].value;
-            const paterno = form.elements["apellidoPaterno"].value;
-            const materno = form.elements["apellidoMaterno"].value;
-            const fechaNac = form.elements["fechaNacimiento"].value;
-            const rfc = generarRFC(nombre, paterno, materno, fechaNac);
-            form.elements["rfc"].value = rfc;
+              const nombre = form.elements["nombre"].value;
+              const paterno = form.elements["apellidoPaterno"].value;
+              const materno = form.elements["apellidoMaterno"].value;
+              const fechaNac = form.elements["fechaNacimiento"].value;
+              const rfc = generarRFC(nombre, paterno, materno, fechaNac);
+              form.elements["rfc"].value = rfc;
             }
         });
-    </script>
-    
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyDhjt6n29YZsib-JkXcl6GcYa8EXigSBGU",
-        authDomain: "basedatosfinancierabidallei01.firebaseapp.com",
-        projectId: "basedatosfinancierabidallei01",
-        storageBucket: "basedatosfinancierabidallei01.firebasestorage.app",
-        messagingSenderId: "1072895987138",
-        appId: "1:1072895987138:web:fe27b216af1ae8e31ada5b",
-        measurementId: "G-HMF2T2675G"
-      };
-
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
-
-      document.getElementById("formCliente").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const form = e.target;
-        const datos = {};
-        const elementos = form.elements;
-
-        for (let i = 0; i < elementos.length; i++) {
-          const el = elementos[i];
-          if (el.name) datos[el.name] = el.value;
-        }
-
-        try {
-          await db.collection("clientes").add(datos);
-          alert("Datos guardados en Firebase con éxito.");
-          form.reset();
-        } catch (error) {
-          console.error("Error al guardar en Firebase:", error);
-          alert("Error al guardar datos.");
-        }
-      });
     </script>
 </body>
 </html>
