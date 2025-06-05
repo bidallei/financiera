@@ -9,162 +9,166 @@
   <link rel="stylesheet" href="clientenuevo.css">
 </head>
 <body>
+    <!-- Firebase SDKs (compatibilidad para usar en GitHub Pages) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    
     <div id="header-container"></div>
     <div class="container">
-    <h1>Registro de Nuevo Cliente</h1>
+      <h1>Registro de Nuevo Cliente</h1>
 
-    <form id="formCliente">
+      <form id="formCliente">
 
-      <fieldset>
-        <legend>Datos generales</legend>
-        <label>Nombre(s): <input type="text" name="nombre" required></label>
-        <label>Apellido Paterno: <input type="text" name="apellidoPaterno" required></label>
-        <label>Apellido Materno: <input type="text" name="apellidoMaterno"></label>
-        <label>Sexo:
-          <select name="sexo" required>
-            <option value="masculino">Masculino</option>
-            <option value="femenino">Femenino</option>
-          </select>
-        </label>
-        <label>Fecha de nacimiento: <input type="date" name="fechaNacimiento" required></label>
-        <label>RFC: <input type="text" name="rfc" readonly placeholder="Se genera automáticamente"></label>
-        <label>Estado civil:
-          <select name="esadoCivil" required>
-            <option value="casado">Casado</option>
-            <option value="soltero">Soltero</option>
-            <option value="divorciado">Divorciado</option>
-            <option value="viudo">Viudo</option>
-            <option value="unionLibre">Unión Libre</option>
-            <option value="otro">Otro</option>
-          </select>
-        </label>
+        <fieldset>
+          <legend>Datos generales</legend>
+          <label>Nombre(s): <input type="text" name="nombre" required></label>
+          <label>Apellido Paterno: <input type="text" name="apellidoPaterno" required></label>
+          <label>Apellido Materno: <input type="text" name="apellidoMaterno"></label>
+          <label>Sexo:
+            <select name="sexo" required>
+              <option value="masculino">Masculino</option>
+              <option value="femenino">Femenino</option>
+            </select>
+          </label>
+          <label>Fecha de nacimiento: <input type="date" name="fechaNacimiento" required></label>
+          <label>RFC: <input type="text" name="rfc" readonly placeholder="Se genera automáticamente"></label>
+          <label>Estado civil:
+            <select name="esadoCivil" required>
+              <option value="casado">Casado</option>
+              <option value="soltero">Soltero</option>
+              <option value="divorciado">Divorciado</option>
+              <option value="viudo">Viudo</option>
+              <option value="unionLibre">Unión Libre</option>
+              <option value="otro">Otro</option>
+            </select>
+          </label>
 
-        <h4>Domicilio</h4>
-        <label>Calle: <input type="text" name="calle" required></label>
-        <label>Número exterior: <input type="text" name="numExterior" required></label>
-        <label>Número interior: <input type="text" name="numInterior"></label>
-        <label>Colonia: <input type="text" name="colonia" required></label>
-        <label>Entre calle: <input type="text" name="entrecalle" required></label>
-        <label>y calle: <input type="text" name="ycalle" required></label>
-        <label>Código Postal: <input type="text" name="cp" required></label>
+          <h4>Domicilio</h4>
+          <label>Calle: <input type="text" name="calle" required></label>
+          <label>Número exterior: <input type="text" name="numExterior" required></label>
+          <label>Número interior: <input type="text" name="numInterior"></label>
+          <label>Colonia: <input type="text" name="colonia" required></label>
+          <label>Entre calle: <input type="text" name="entrecalle" required></label>
+          <label>y calle: <input type="text" name="ycalle" required></label>
+          <label>Código Postal: <input type="text" name="cp" required></label>
 
-        <label>Teléfono: <input type="tel" name="telefono" required></label>
-        <label>Correo electrónico: <input type="mail" name="email"></label>
-        <label>Tipo de vivienda: <input type="text" name="tipoVivienda"></label>
-        <label>Tiempo de residencia: <input type="text" name="tiempoResidencia"></label>
-        <label>Dependientes económicos: <input type="number" name="dependientes" min="0"></label>
-      </fieldset>
+          <label>Teléfono: <input type="tel" name="telefono" required></label>
+          <label>Correo electrónico: <input type="mail" name="email"></label>
+          <label>Tipo de vivienda: <input type="text" name="tipoVivienda"></label>
+          <label>Tiempo de residencia: <input type="text" name="tiempoResidencia"></label>
+          <label>Dependientes económicos: <input type="number" name="dependientes" min="0"></label>
+        </fieldset>
 
-      <fieldset>
-        <legend>Datos laborales</legend>
-        <label>Empresa: <input type="text" name="empresa"></label>
-        <label>Fecha de ingreso: <input type="month" name="fechaIngreso"></label>
-        <h4>Domicilio</h4>
-        <label>Calle: <input type="text" name="calleTrabajo"></label>
-        <label>Número: <input type="text" name="numTrabajo"></label>
-        <label>Colonia: <input type="text" name="coloniaTrabajo" required></label>
-        <label>Puesto: <input type="text" name="puesto"></label>
-        <label>Sueldo:
-          <input type="number" name="sueldo" min="0">
-          <select name="periodicidadSueldo">
-            <option value="semanal">Semanal</option>
-            <option value="quincenal">Quincenal</option>
-            <option value="mensual">Mensual</option>
-          </select>
-        </label>
-        <label>Teléfono: <input type="tel" name="telTrabajo"></label>
-        
-        <label>Nombre del jefe inmediato: <input type="text" name="jefeInmediato"></label>
-        <label>Otra percepción: <input type="text" name="otraPercepcion"></label>
-        <label>Aportación mensual de percepción extra: <input type="number" name="aportacionPercepcion" min="0"></label>
-      </fieldset>
+        <fieldset>
+          <legend>Datos laborales</legend>
+          <label>Empresa: <input type="text" name="empresa"></label>
+          <label>Fecha de ingreso: <input type="month" name="fechaIngreso"></label>
+          <h4>Domicilio</h4>
+          <label>Calle: <input type="text" name="calleTrabajo"></label>
+          <label>Número: <input type="text" name="numTrabajo"></label>
+          <label>Colonia: <input type="text" name="coloniaTrabajo" required></label>
+          <label>Puesto: <input type="text" name="puesto"></label>
+          <label>Sueldo:
+            <input type="number" name="sueldo" min="0">
+            <select name="periodicidadSueldo">
+              <option value="semanal">Semanal</option>
+              <option value="quincenal">Quincenal</option>
+              <option value="mensual">Mensual</option>
+            </select>
+          </label>
+          <label>Teléfono: <input type="tel" name="telTrabajo"></label>
+          <label>Nombre del jefe inmediato: <input type="text" name="jefeInmediato"></label>
+          <label>Otra percepción: <input type="text" name="otraPercepcion"></label>
+          <label>Aportación mensual de percepción extra: <input type="number" name="aportacionPercepcion" min="0"></label>
+        </fieldset>
 
-      <fieldset>
-        <legend>Aval</legend>
-        <label>Nombre(s): <input type="text" name="avalNombre"></label>
-        <label>Apellido Paterno: <input type="text" name="apellidoPaternoAval" required></label>
-        <label>Apellido Materno: <input type="text" name="apellidoMaternoAval"></label>
-        <h4>Domicilio</h4>
-        <label>Calle: <input type="text" name="avalCalle" required></label>
-        <label>Número: <input type="text" name="avalNum" required></label>
-        <label>Colonia: <input type="text" name="avalColonia" required></label>
-        <label>Teléfono: <input type="tel" name="avalTelefono"></label>
-        <label>Celular: <input type="tel" name="avalCelular"></label>
-        <label>Correo electrónico: <input type="email" name="avalEmail"></label>
-        <label>Parentesco: 
-          <select name="avalParentesco">
-            <option value="padre">Padre</option>
-            <option value="madre">Madre</option>
-            <option value="hermano">Hermano</option>
-            <option value="hijo">Hijo</option>
-            <option value="conyuge">Cónyuge</option>
-            <option value="otro">Otro</option>
-          </select>
-        </label>
-        <label>Trabajo: <input type="text" name="avalTrabajo"></label>
-        <label>Número de INE: <input type="text" name="avalINE"></label>
+        <fieldset>
+          <legend>Aval</legend>
+          <label>Nombre(s): <input type="text" name="avalNombre"></label>
+          <label>Apellido Paterno: <input type="text" name="apellidoPaternoAval" required></label>
+          <label>Apellido Materno: <input type="text" name="apellidoMaternoAval"></label>
+          <h4>Domicilio</h4>
+          <label>Calle: <input type="text" name="avalCalle" required></label>
+          <label>Número: <input type="text" name="avalNum" required></label>
+          <label>Colonia: <input type="text" name="avalColonia" required></label>
+          <label>Teléfono: <input type="tel" name="avalTelefono"></label>
+          <label>Celular: <input type="tel" name="avalCelular"></label>
+          <label>Correo electrónico: <input type="email" name="avalEmail"></label>
+          <label>Parentesco: 
+            <select name="avalParentesco">
+              <option value="padre">Padre</option>
+              <option value="madre">Madre</option>
+              <option value="hermano">Hermano</option>
+              <option value="hijo">Hijo</option>
+              <option value="conyuge">Cónyuge</option>
+              <option value="otro">Otro</option>
+            </select>
+          </label>
+          <label>Trabajo: <input type="text" name="avalTrabajo"></label>
+          <label>Número de INE: <input type="text" name="avalINE"></label>
 
-      <fieldset>
-        <legend>Referencia 1</legend>
-        <label>Nombre(s): <input type="text" name="ref1Nombre"></label>
-        <label>Apellido Paterno: <input type="text" name="ref1ApellidoPaterno"></label>
-        <label>Apellido Materno: <input type="text" name="ref1ApellidoMaterno"></label>
-        <h4>Domicilio</h4>
-        <label>Calle: <input type="text" name="ref1Calle"></label>
-        <label>Número: <input type="text" name="ref1Numero"></label>
-        <label>Colonia: <input type="text" name="ref1Colonia"></label>
-        <label>Teléfono: <input type="tel" name="ref1Telefono"></label>
-        <label>Celular: <input type="tel" name="ref1Celular"></label>
-        <label>Parentesco: 
-          <select name="avalParentesco">
-            <option value="padre">Padre</option>
-            <option value="madre">Madre</option>
-            <option value="hermano">Hermano</option>
-            <option value="hijo">Hijo</option>
-            <option value="conyuge">Cónyuge</option>
-            <option value="otro">Otro</option>
-          </select>
-        </label>
-        <label>Tiempo de conocerse: <input type="text" name="ref1Tiempo"></label>
-      </fieldset>
+        <fieldset>
+          <legend>Referencia 1</legend>
+          <label>Nombre(s): <input type="text" name="ref1Nombre"></label>
+          <label>Apellido Paterno: <input type="text" name="ref1ApellidoPaterno"></label>
+          <label>Apellido Materno: <input type="text" name="ref1ApellidoMaterno"></label>
+          <h4>Domicilio</h4>
+          <label>Calle: <input type="text" name="ref1Calle"></label>
+          <label>Número: <input type="text" name="ref1Numero"></label>
+          <label>Colonia: <input type="text" name="ref1Colonia"></label>
+          <label>Teléfono: <input type="tel" name="ref1Telefono"></label>
+          <label>Celular: <input type="tel" name="ref1Celular"></label>
+          <label>Parentesco: 
+            <select name="avalParentesco">
+              <option value="padre">Padre</option>
+              <option value="madre">Madre</option>
+              <option value="hermano">Hermano</option>
+              <option value="hijo">Hijo</option>
+              <option value="conyuge">Cónyuge</option>
+              <option value="otro">Otro</option>
+            </select>
+          </label>
+          <label>Tiempo de conocerse: <input type="text" name="ref1Tiempo"></label>
+        </fieldset>
 
-      <fieldset>
-        <legend>Referencia 2</legend>
-        <label>Nombre(s): <input type="text" name="ref2Nombre"></label>
-        <label>Apellido Paterno: <input type="text" name="ref2ApellidoPaterno"></label>
-        <label>Apellido Materno: <input type="text" name="ref2ApellidoMaterno"></label>
-        <h4>Domicilio</h4>
-        <label>Calle: <input type="text" name="ref2Calle"></label>
-        <label>Número: <input type="text" name="ref2Numero"></label>
-        <label>Colonia: <input type="text" name="ref2Colonia"></label>
-        <label>Teléfono: <input type="tel" name="ref2Telefono"></label>
-        <label>Celular: <input type="tel" name="ref2Celular"></label>
-        <label>Parentesco: 
-          <select name="avalParentesco">
-            <option value="padre">Padre</option>
-            <option value="madre">Madre</option>
-            <option value="hermano">Hermano</option>
-            <option value="hijo">Hijo</option>
-            <option value="conyuge">Cónyuge</option>
-            <option value="otro">Otro</option>
-          </select>
-        <label>Tiempo de conocerse: <input type="text" name="ref2Tiempo"></label>
+        <fieldset>
+          <legend>Referencia 2</legend>
+          <label>Nombre(s): <input type="text" name="ref2Nombre"></label>
+          <label>Apellido Paterno: <input type="text" name="ref2ApellidoPaterno"></label>
+          <label>Apellido Materno: <input type="text" name="ref2ApellidoMaterno"></label>
+          <h4>Domicilio</h4>
+          <label>Calle: <input type="text" name="ref2Calle"></label>
+          <label>Número: <input type="text" name="ref2Numero"></label>
+          <label>Colonia: <input type="text" name="ref2Colonia"></label>
+          <label>Teléfono: <input type="tel" name="ref2Telefono"></label>
+          <label>Celular: <input type="tel" name="ref2Celular"></label>
+          <label>Parentesco: 
+            <select name="avalParentesco">
+              <option value="padre">Padre</option>
+              <option value="madre">Madre</option>
+              <option value="hermano">Hermano</option>
+              <option value="hijo">Hijo</option>
+              <option value="conyuge">Cónyuge</option>
+              <option value="otro">Otro</option>
+            </select>
+          <label>Tiempo de conocerse: <input type="text" name="ref2Tiempo"></label>
 
-      <div class="form-actions">
-        <button type="submit">Guardar</button>
-        <button type="reset">Limpiar</button>
-      </div>
+        <div class="form-actions">
+          <button type="submit">Guardar</button>
+          <button type="reset">Limpiar</button>
+        </div>
 
-    </form>
-  </div>
+      </form>
+    </div>
+
     <script>
         fetch('header.html')
             .then(res => res.text())
             .then(data => {
-            document.getElementById('header-container').innerHTML = data;
+              document.getElementById('header-container').innerHTML = data;
             })
             .catch(err => {
-            console.error('Error al cargar el header:', err);
+              console.error('Error al cargar el header:', err);
             });
 
         function generarRFC(nombreCompleto, paterno, materno, fechaNac) {
@@ -220,16 +224,12 @@
             const paterno = form.elements["apellidoPaterno"].value;
             const materno = form.elements["apellidoMaterno"].value;
             const fechaNac = form.elements["fechaNacimiento"].value;
-
             const rfc = generarRFC(nombre, paterno, materno, fechaNac);
             form.elements["rfc"].value = rfc;
             }
         });
     </script>
-    <!-- SDK Firebase compat (no usar type="module") -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
+    
     <script>
       const firebaseConfig = {
         apiKey: "AIzaSyDhjt6n29YZsib-JkXcl6GcYa8EXigSBGU",
@@ -244,30 +244,6 @@
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
 
-      document.getElementById("formCliente").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const form = e.target;
-        const datos = {};
-        const elementos = form.elements;
-
-        for (let i = 0; i < elementos.length; i++) {
-          const el = elementos[i];
-          if (el.name) datos[el.name] = el.value;
-        }
-
-        try {
-          await db.collection("clientes").add(datos);
-          alert("Datos guardados en Firebase con éxito.");
-          form.reset();
-        } catch (error) {
-          console.error("Error al guardar en Firebase:", error);
-          alert("Error al guardar datos.");
-        }
-      });
-    </script>
-    
-    <script>
       document.getElementById("formCliente").addEventListener("submit", async (e) => {
         e.preventDefault();
 
