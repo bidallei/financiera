@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nuevo Cliente</title>
   <link rel="stylesheet" href="clientenuevo.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
   <!-- Firebase SDKs -->
@@ -46,6 +47,28 @@
         try {
           await addDoc(collection(db, "clientes"), datos);
           alert("Datos guardados en Firebase con éxito.");
+          
+          // GENERAR PDF con jsPDF
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+
+          let y = 10;
+          doc.setFontSize(12);
+          doc.text("Registro de Nuevo Cliente", 10, y);
+          y += 10;
+
+          for (const [campo, valor] of Object.entries(datos)) {
+            const texto = `${campo}: ${valor}`;
+            doc.text(texto, 10, y);
+            y += 8;
+            if (y > 280) {
+              doc.addPage();
+              y = 10;
+            }
+          }
+
+          doc.save(`cliente_${datos.nombre || 'nuevo'}.pdf`);
+
           form.reset();
         } catch (error) {
           console.error("Error al guardar en Firebase:", error);
@@ -149,6 +172,7 @@
           </label>
           <label>Trabajo: <input type="text" name="avalTrabajo"></label>
           <label>Número de INE: <input type="text" name="avalINE"></label>
+        </fieldset>
 
         <fieldset>
           <legend>Referencia 1</legend>
@@ -200,6 +224,7 @@
           <button type="submit">Guardar</button>
           <button type="reset">Limpiar</button>
         </div>
+        </fieldset>
 
       </form>
     </div>
