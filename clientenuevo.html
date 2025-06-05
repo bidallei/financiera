@@ -29,7 +29,7 @@
         <label>Fecha de nacimiento: <input type="date" name="fechaNacimiento" required></label>
         <label>RFC: <input type="text" name="rfc" readonly placeholder="Se genera automáticamente"></label>
         <label>Estado civil:
-          <select name="sexo" required>
+          <select name="esadoCivil" required>
             <option value="casado">Casado</option>
             <option value="soltero">Soltero</option>
             <option value="divorciado">Divorciado</option>
@@ -226,6 +226,70 @@
             }
         });
     </script>
+    <!-- SDK Firebase compat (no usar type="module") -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDhjt6n29YZsib-JkXcl6GcYa8EXigSBGU",
+        authDomain: "basedatosfinancierabidallei01.firebaseapp.com",
+        projectId: "basedatosfinancierabidallei01",
+        storageBucket: "basedatosfinancierabidallei01.firebasestorage.app",
+        messagingSenderId: "1072895987138",
+        appId: "1:1072895987138:web:fe27b216af1ae8e31ada5b",
+        measurementId: "G-HMF2T2675G"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      document.getElementById("formCliente").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const form = e.target;
+        const datos = {};
+        const elementos = form.elements;
+
+        for (let i = 0; i < elementos.length; i++) {
+          const el = elementos[i];
+          if (el.name) datos[el.name] = el.value;
+        }
+
+        try {
+          await db.collection("clientes").add(datos);
+          alert("Datos guardados en Firebase con éxito.");
+          form.reset();
+        } catch (error) {
+          console.error("Error al guardar en Firebase:", error);
+          alert("Error al guardar datos.");
+        }
+      });
+    </script>
+    
+    <script>
+      document.getElementById("formCliente").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const form = e.target;
+        const datos = {};
+        const elementos = form.elements;
+
+        for (let i = 0; i < elementos.length; i++) {
+          const el = elementos[i];
+          if (el.name) datos[el.name] = el.value;
+        }
+
+        try {
+          await db.collection("clientes").add(datos);
+          alert("Datos guardados en Firebase con éxito.");
+          form.reset();
+        } catch (error) {
+          console.error("Error al guardar en Firebase:", error);
+          alert("Error al guardar datos.");
+        }
+      });
+    </script>
 </body>
 </html>
+
